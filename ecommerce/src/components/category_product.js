@@ -1,10 +1,13 @@
 import React from 'react'
+import { Link,useNavigate } from 'react-router-dom'
 
-const CategoryProduct = ({title,image,specs,features,price,stock}) => {
+const CategoryProduct = ({ id, title, image, specs, features, price, stock }) => {
+    //can use the navigate function to navigate to the other routes
+    const navigate = useNavigate();
   return (
       <article>
           <div className='category-product-title'>
-              {title}
+              <Link to={`products/${id}`}>{title}</Link>
           </div>
           <figure>
               <div className='category-product-image-container'>
@@ -15,7 +18,7 @@ const CategoryProduct = ({title,image,specs,features,price,stock}) => {
           <aside>
               <div className='category-product-info-dimensions'>
                   <h3>Dimensions</h3>
-                  <label>{specs.dimension}</label>
+                  <label>{specs.dimensions}</label>
               </div>
               {specs.capacity &&
                   <div className='category-product-info-capacity'>
@@ -27,8 +30,8 @@ const CategoryProduct = ({title,image,specs,features,price,stock}) => {
               <div className='category-product-info-features'>
                   <h3>Features</h3>
                   <ul>
-                      {features?.map((f) => {
-                          return <li>{f}</li>
+                      {features?.map((f,i) => {
+                          return <li key={`feature${i}`}>{f}</li>
                       })}
                   </ul>
               </div>
@@ -45,8 +48,8 @@ const CategoryProduct = ({title,image,specs,features,price,stock}) => {
               </div>
 
               <div className='category-product-action'>
-                  <button>View Products</button>
-                  <button>Add to Basket</button>
+                  <button onClick={()=>navigate(`products/${id}`)}>View Products</button>
+                  <button onClick={()=>navigate(`basket`)}>Add to Basket</button>
               </div>
             
           </aside>
