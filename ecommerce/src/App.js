@@ -3,21 +3,46 @@ import React, {useState} from 'react';
 import './App.css';
 
 import Category from './components/Category';
+import { getCategories, getProducts } from './fetcher';
 
 function App() {
-  const [results, setResults] = useState([]);
+
+  // set for the categories and prodcuts
+  const [categorie, setCategories] = useState({ errorMessage: '', data: [] });
+  const [products, setProducts] = useState({ errorMessage: '', data: [] });
+
+  // using fetch from db to fetch categories, we use fetch.js to fetch the data 
   React.useEffect(() => {
-    fetch("http://localhost:3001/categories")
-      .then(response => response.json())
-      .then(data => {
-    })
+    const fetchdata = async () => {
+      const responseObject = await getCategories();
+      setCategories(responseObject);
+    }
+    fetchdata();
   },[])
 
-  const renderCategories = () =>{
+  // when user click on a category it opne the prodcuts 
+  const handleCategoryClick = id => {
+    const fetchdata = async () => {
+      const responseObject = await getProducts(id);
+      setProducts(responseObject);
+    }
+    fetchdata();
+  }
 
-    return results.map(c=>
-      <Category key={c.id} id={c.id} title={c.title}/>
-    );
+  //render categories
+  const renderCategories = () => {
+    
+    return categorie.data.map(c =>
+      <Category key={c.id} id={c.id} title={c.title} onCategoryClick={() => handleCategoryClick(c.id)}/>
+      );
+  }
+
+
+  // this is to render prodcuts
+  const renderProducts = () => {
+    return products.data.map(p => 
+      <div>{p.title}</div>
+    )
   }
    
   return (
@@ -25,12 +50,16 @@ function App() {
       <header>My store </header>
       <section>
         <nav>
-          {
-          renderCategories()
-          }
+          
+          {categorie.errorMessage && <div>Error :{ categorie.errorMessage}</div>}
+            { categorie.data && renderCategories() }
+          
         </nav>
       <article>
-        main area
+          <h1>Products</h1>
+          {products.errorMessage && <div>Error :{products.errorMessage}</div>}
+            { products.data && renderProducts() }
+          
       </article>
       </section>
 
