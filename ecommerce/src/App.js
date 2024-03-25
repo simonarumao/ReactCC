@@ -1,8 +1,10 @@
 // import logo from './logo.svg';
+// json-server --watch src/db/db.json --port 3001
 import React, {useState} from 'react';
 import './App.css';
 
 import Category from './components/Category';
+import CategoryProduct from './components/category_product';
 import { getCategories, getProducts } from './fetcher';
 
 function App() {
@@ -40,8 +42,7 @@ function App() {
 
   // this is to render prodcuts
   const renderProducts = () => {
-    return products.data.map(p => 
-      <div>{p.title}</div>
+    return products.data.map(p => <CategoryProduct{...p}>{p.title}</CategoryProduct>
     )
   }
    
@@ -55,12 +56,12 @@ function App() {
             { categorie.data && renderCategories() }
           
         </nav>
-      <article>
+      <main>
           <h1>Products</h1>
           {products.errorMessage && <div>Error :{products.errorMessage}</div>}
             { products.data && renderProducts() }
           
-      </article>
+      </main>
       </section>
 
       <footer>
